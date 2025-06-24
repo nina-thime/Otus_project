@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'flask_nodes'
+    static_configs:
+      - targets:
+          - '192.168.56.11:5000'
+          - '192.168.56.12:5000'
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['192.168.56.13:9113']
+
+  - job_name: 'mysql'
+    static_configs:
+      - targets:
+          - '192.168.0.11:9104'  # backend1 (primary)
+          - '192.168.0.12:9104'  # backend2 (replica)
