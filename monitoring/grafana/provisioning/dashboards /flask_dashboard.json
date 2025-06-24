@@ -1,0 +1,140 @@
+{
+  "id": null,
+  "uid": "flask-monitor",
+  "title": "Мониторинг Flask-приложения",
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 2,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Всего HTTP-запросов",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "expr": "sum(flask_http_request_total)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Средняя длительность запроса (1 мин)",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "expr": "rate(flask_http_request_duration_seconds_sum[1m]) / rate(flask_http_request_duration_seconds_count[1m])",
+          "refId": "B"
+        }
+      ],
+      "format": "s"
+    },
+    {
+      "type": "graph",
+      "title": "Число запросов по методу",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "sum by(method) (rate(flask_http_request_total[1m]))",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Число запросов по статусу",
+      "gridPos": {
+        "x": 0,
+        "y": 10,
+        "w": 12,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "sum by(status) (rate(flask_http_request_total[1m]))",
+          "refId": "D"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Ошибки (статусы не 2xx)",
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(flask_http_request_total{status!~\"2..\"}[1m]))",
+          "refId": "E"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "95-й процентиль задержки",
+      "gridPos": {
+        "x": 6,
+        "y": 16,
+        "w": 6,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(flask_http_request_duration_seconds_bucket[1m])) by (le))",
+          "refId": "F"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Использование CPU контейнером (необязательно)",
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 12,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "rate(container_cpu_usage_seconds_total{name=~\".*flask.*\"}[1m])",
+          "refId": "G"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Операции вставки в БД (необязательно)",
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 12,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "rate(myapp_db_inserts_total[1m])",
+          "refId": "H"
+        }
+      ]
+    }
+  ]
+}
