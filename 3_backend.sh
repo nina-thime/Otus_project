@@ -96,4 +96,4 @@ docker run -d \
 
 echo "[5/5] Готово!"
 echo "Flask-приложение доступно на порту 5000"
-echo "Метрики MariaDB exporter доступны на http://localhost:9104/metrics"
+echo "Метрики MariaDB exporter доступны на http://IP_frontend:9104/metrics"
